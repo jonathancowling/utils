@@ -22,7 +22,10 @@ EOF
 
 }
 
+# default variables
 CONFIG_LOCATION="${HOME}/.config/aws-login"
+FORCE=""
+PROFILE="default"
 
 [ -f "$CONFIG_LOCATION" ] && . "$CONFIG_LOCATION" 
 
@@ -56,19 +59,19 @@ if [ -n "$HELP" ]; then
   exit 0
 fi
 
-if [ -z "$PROFILE" ]; then
+if [ -z "${PROFILE-}" ]; then
   read -p "AWS Profile: " PROFILE
 fi
-if [ -z "$USERNAME" ]; then
+if [ -z "${USERNAME-}" ]; then
   read -p "Username: " USERNAME
 fi
-if [ -z "$ROLE_ARN" ]; then
+if [ -z "${ROLE_ARN-}" ]; then
   read -p "Role ARN: " ROLE_ARN
 fi
-if [ -z "$SP_ID" ]; then
+if [ -z "${SP_ID-}" ]; then
   read -p "Service Provider ID: " SP_ID
 fi
-if [ -z "$IDP_ID" ]; then
+if [ -z "${IDP_ID-}" ]; then
   read -p "Identity Provider ID: " IDP_ID
 fi
 
@@ -83,7 +86,7 @@ gsts \
   --idp-id "$IDP_ID" \
   --username "$USERNAME" \
   --aws-profile "$PROFILE" \
-  $FORCE_STRING
+  "${FORCE_STRING-}"
 
 if [ "$?" -ne "0" ]; then
   usage
